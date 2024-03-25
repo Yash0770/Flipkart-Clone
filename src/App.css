@@ -4,3 +4,7 @@
   font-size: 16px;
   align-items: center;
 }
+
+.login-dialog-button{
+  text-transform: none;
+}
