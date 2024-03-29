@@ -1,7 +1,16 @@
-import React, { useState } from "react";
-import { Button, Dialog, TextField } from "@mui/material";
+import React, { useState, useContext } from "react";
+import { Button, Dialog, TextField, Typography, styled } from "@mui/material";
 
-import { authenticateSignup } from "../../service/api";
+import { authenticateLogin, authenticateSignup } from "../../service/api";
+import { DataContext } from "../../context/DataProvider";
+
+const Error = styled(Typography)`
+  margin-top: 10px;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 0;
+  color: #ff6161;
+`;
 
 const accountInitialValues = {
   login: {
@@ -25,9 +34,18 @@ const signupInitialValues = {
   phone: "",
 };
 
+const loginInitialValues = {
+  username: "",
+  password: "",
+};
+
 const LoginDialog = ({ open, setOpen }) => {
   const [account, toggleAccount] = useState(accountInitialValues.login);
   const [signup, setSignup] = useState(signupInitialValues);
+  const [login, setLogin] = useState(loginInitialValues);
+  const [error, setError] = useState(false);
+
+  const { setAccount } = useContext(DataContext);
 
   const toggleSignup = () => {
     toggleAccount(accountInitialValues.signUp);
@@ -36,6 +54,7 @@ const LoginDialog = ({ open, setOpen }) => {
   const handleClose = () => {
     setOpen(false);
     toggleAccount(accountInitialValues.login);
+    setError(false);
   };
 
   const onInputChange = (e) => {
@@ -47,6 +66,28 @@ const LoginDialog = ({ open, setOpen }) => {
 
   const signupUser = async () => {
     let response = await authenticateSignup(signup);
+    console.log("res", response);
+    if (!response) return;
+    handleClose();
+    setAccount(signup.firstname);
+  };
+
+  const onValueChange = (e) => {
+    setLogin({
+      ...login,
+      [e.target.name]: [e.target.value],
+    });
+  };
+
+  const loginUser = async () => {
+    let response = await authenticateLogin(login);
+    console.log("res", response);
+    if (response.status === 200) {
+      handleClose();
+      setAccount(response.data.data.firstname);
+    } else {
+      setError(true);
+    }
   };
 
   return (
@@ -88,11 +129,20 @@ const LoginDialog = ({ open, setOpen }) => {
                 flex: "1",
               }}
             >
-              <TextField variant="standard" label="Enter Email/Mobile Number" />
+              <TextField
+                variant="standard"
+                // label="Enter Email/Mobile Number"
+                label="Enter Username"
+                onChange={(e) => onValueChange(e)}
+                name="username"
+              />
+              {error && <Error>Please enter valid username or password</Error>}
               <TextField
                 variant="standard"
                 label="Enter Password"
                 className="mt-3"
+                onChange={(e) => onValueChange(e)}
+                name="password"
               />
               <p
                 className="mt-3"
@@ -109,6 +159,7 @@ const LoginDialog = ({ open, setOpen }) => {
                   height: "48px",
                   borderRadius: "2px",
                 }}
+                onClick={() => loginUser()}
               >
                 Login
               </Button>
@@ -198,7 +249,7 @@ const LoginDialog = ({ open, setOpen }) => {
                   height: "48px",
                   borderRadius: "2px",
                 }}
-                onClick={()=>signupUser()}
+                onClick={() => signupUser()}
               >
                 Continue
               </Button>
