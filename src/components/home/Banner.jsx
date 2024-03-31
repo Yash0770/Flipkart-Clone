@@ -2,6 +2,7 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { bannerData } from "../../constants/data";
+import { styled } from "@mui/material";
 
 const responsive = {
   // superLargeDesktop: {
@@ -22,6 +23,16 @@ const responsive = {
   },
 };
 
+const Image = styled("img")(({ theme }) => ({
+  width: "100%",
+  height: "280px",
+
+  [theme.breakpoints.down("md")]: {
+    objectFit: "cover",
+    height: "180px",
+  },
+}));
+
 const Banner = () => {
   return (
     <Carousel
@@ -38,10 +49,10 @@ const Banner = () => {
       slidesToSlide={1}
     >
       {bannerData.map((data) => (
-        <img
+        <Image
           src={data.url}
           alt="banner"
-          style={{ width: "100%", height: "280px" }}
+          // style={{ width: "100%", height: "280px" }}
         />
       ))}
     </Carousel>

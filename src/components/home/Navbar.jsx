@@ -1,11 +1,23 @@
 import React from "react";
+import { Box, styled } from "@mui/material";
 import { navData } from "../../constants/data";
 
 const Navbar = () => {
+  const Component = styled(Box)(({ theme }) => ({
+    display: "flex",
+    margin: "55px 130px 0 130px",
+    justifyContent: "space-between",
+    // overflow: 'overlay',
+    overflow: "hidden",
+
+    [theme.breakpoints.down("lg")]: {
+      margin: 0,
+    },
+  }));
+
   return (
-    <div
-      className="d-flex justify-content-between"
-      style={{ margin: "55px 130px 0 130px" }}
+    <Component
+    // className="d-flex justify-content-between"
     >
       {navData.map((data) => (
         <div className="pt-3 px-1 text-center">
@@ -22,7 +34,7 @@ const Navbar = () => {
           </p>
         </div>
       ))}
-    </div>
+    </Component>
   );
 };
 
