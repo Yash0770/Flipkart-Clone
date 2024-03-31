@@ -9,7 +9,30 @@ import Profile from "./Profile";
 const Wrapper = styled(Box)`
   display: flex;
   margin: 0 3% 0 auto;
+
+  & > button,
+  & > p,
+  & > div {
+    margin-right: 40px;
+    font-size: 14px;
+    align-items: center;
+  }
 `;
+
+const Container = styled(Box)`
+  display: flex;
+`;
+
+// const LoginButton = styled(Button)`
+//   color: "#2874f0";
+//   background: "#ffffff";
+//   text-transform: "none";
+//   padding: "5px 40px";
+//   border-radius: "2px";
+//   box-shadow: "none";
+//   font-weight: "600";
+//   height: "32px";
+// `
 
 const CustomButtons = () => {
   const [open, setOpen] = useState(false);
@@ -21,13 +44,13 @@ const CustomButtons = () => {
   };
 
   return (
-    <Wrapper>
+    <Wrapper className="wrapper-btn">
       {account ? (
         <Profile account={account} setAccount={setAccount} />
       ) : (
         <Button
+        className="login-custom-btn"
           variant="contained"
-          className="navbar-btn"
           style={{
             color: "#2874f0",
             background: "#ffffff",
@@ -49,13 +72,11 @@ const CustomButtons = () => {
       >
         Become a Seller
       </Typography>
-      <Typography className="navbar-btn" style={{ marginTop: "3px" }}>
-        More
-      </Typography>
-      <Box className="navbar-btn d-flex">
+      <Typography style={{ marginTop: "3px" }}>More</Typography>
+      <Container>
         <ShoppingCartIcon />
         <Typography>Cart</Typography>
-      </Box>
+      </Container>
       <LoginDialog open={open} setOpen={setOpen} />
     </Wrapper>
   );
