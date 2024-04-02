@@ -16,6 +16,7 @@ const Navbar = () => {
   }));
 
   return (
+    <Box style={{background: '#ffffff'}}>
     <Component
     // className="d-flex justify-content-between"
     >
@@ -35,6 +36,7 @@ const Navbar = () => {
         </div>
       ))}
     </Component>
+    </Box>
   );
 };
 

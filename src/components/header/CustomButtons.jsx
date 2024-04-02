@@ -1,10 +1,13 @@
 import React, { useState, useContext } from "react";
-import { Box, Button, Typography, styled } from "@mui/material";
+import { Badge, Box, Button, Typography, styled } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import LoginDialog from "../login/LoginDialog";
+import { Link } from "react-router-dom";
 
 import { DataContext } from "../../context/DataProvider";
 import Profile from "./Profile";
+import CartItem from "../cart/CartItem";
+import { useSelector } from "react-redux";
 
 const Wrapper = styled(Box)`
   display: flex;
@@ -13,14 +16,16 @@ const Wrapper = styled(Box)`
   & > button,
   & > p,
   & > div {
-    margin-right: 40px;
+    margin-right: 40px !important;
     font-size: 14px;
     align-items: center;
   }
 `;
 
-const Container = styled(Box)`
+const Container = styled(Link)`
   display: flex;
+  text-decoration: none;
+  color: inherit;
 `;
 
 // const LoginButton = styled(Button)`
@@ -43,13 +48,15 @@ const CustomButtons = () => {
     setOpen(true);
   };
 
+  const { cartItems } = useSelector((state) => state.cart);
+
   return (
     <Wrapper className="wrapper-btn">
       {account ? (
         <Profile account={account} setAccount={setAccount} />
       ) : (
         <Button
-        className="login-custom-btn"
+          className="login-custom-btn"
           variant="contained"
           style={{
             color: "#2874f0",
@@ -73,9 +80,11 @@ const CustomButtons = () => {
         Become a Seller
       </Typography>
       <Typography style={{ marginTop: "3px" }}>More</Typography>
-      <Container>
-        <ShoppingCartIcon />
-        <Typography>Cart</Typography>
+      <Container to="/cart">
+        <Badge badgeContent={cartItems?.length} color="secondary">
+          <ShoppingCartIcon />
+        </Badge>
+        <Typography style={{ marginLeft: "10px" }}>Cart</Typography>
       </Container>
       <LoginDialog open={open} setOpen={setOpen} />
     </Wrapper>
