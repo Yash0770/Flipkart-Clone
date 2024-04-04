@@ -5,6 +5,8 @@ import FlashOnIcon from "@mui/icons-material/FlashOn";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addToCart } from "../../redux/actions/cartActions";
+import { payUsingPaytm } from "../../service/api";
+import { post } from "../../utils/paytm";
 
 const LeftContainer = styled(Box)(({ theme }) => ({
   minWidth: "40%",
@@ -46,6 +48,15 @@ const ActionItem = ({ product }) => {
     navigate('/cart')
   }
 
+  const buyNow = async ()=>{
+    let response = await payUsingPaytm({amount: 500, email: 'yash7@gmail.com'});
+    let information = {
+      action: 'https://securegw-stage.paytm.in/order/process',
+      params: response,
+    }
+    post(information);
+  }
+
   return (
     <LeftContainer>
       <Box
@@ -66,7 +77,7 @@ const ActionItem = ({ product }) => {
         <ShoppingCartIcon />
         Add to cart
       </StyledButton>
-      <StyledButton variant="contained" style={{ background: "#fb541b" }}>
+      <StyledButton variant="contained" style={{ background: "#fb541b" }} onClick={()=> buyNow()}>
         <FlashOnIcon />
         Buy now
       </StyledButton>

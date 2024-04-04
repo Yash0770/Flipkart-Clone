@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import CartItem from "./CartItem";
 import TotalView from "./TotalView";
 import EmptyCart from "./EmptyCart";
+import { payUsingPaytm } from "../../service/api";
+import { post } from "../../utils/paytm";
 
 const Container = styled(Grid)(({ theme }) => ({
   padding: "30px 135px",
@@ -46,6 +48,15 @@ const LeftComponent = styled(Grid)(({ theme }) => ({
 const Cart = () => {
   const { cartItems } = useSelector((state) => state.cart);
 
+  const buyNow = async ()=>{
+    let response = await payUsingPaytm({amount: 500, email: 'yash7@gmail.com'});
+    let information = {
+      action: 'https://securegw-stage.paytm.in/order/process',
+      params: response,
+    }
+    post(information);
+  }
+
   return (
     <>
       {cartItems.length ? (
@@ -58,7 +69,7 @@ const Cart = () => {
               <CartItem item={item} />
             ))}
             <ButtonWrapper>
-              <StyledButton>Place Order</StyledButton>
+              <StyledButton onClick={()=> buyNow()}>Place Order</StyledButton>
             </ButtonWrapper>
           </LeftComponent>
           <Grid item lg={3} md={3} sm={12} xs={12}>
